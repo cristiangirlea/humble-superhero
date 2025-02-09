@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
 import { BullMQService } from './bullmq.service';
 import { BullMQProcessor } from './bullmq.processor';
+import { PrismaModule } from '../../prisma/prisma.module';
 
 @Module({
     imports: [
+        PrismaModule,
         BullModule.forRoot({
             redis: {
                 host: 'redis',

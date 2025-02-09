@@ -11,11 +11,16 @@ export class BullMQProcessor {
         console.log('Processing job:', job.data);
 
         try {
+            const updateData = {
+                status: 'Processed'
+            };
+
             // Update superhero status in the database
             await this.prisma.superhero.update({
                 where: { id: job.data.heroId },
-                data: { status: 'Processed' },
+                data: updateData,
             });
+
 
             console.log(`Superhero with ID ${job.data.heroId} status updated to 'Processed'`);
         } catch (error) {
