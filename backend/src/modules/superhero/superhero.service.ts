@@ -20,7 +20,7 @@ export class SuperheroService {
             this.prisma.superhero.findMany({
                 skip,
                 take: validLimit,
-                orderBy: { createdAt: 'desc' },
+                orderBy: { humilityScore: 'desc' },
             }),
             this.prisma.superhero.count(),
         ]);

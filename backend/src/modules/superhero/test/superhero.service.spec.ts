@@ -1,27 +1,33 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SuperheroService } from '../superhero.service';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { prismaMock } from '../../../prisma/prisma.mock'; // ✅ Import the mock
 import { BullMQModule } from '../../bullmq/bullmq.module';
 
 describe('SuperheroService', () => {
     let service: SuperheroService;
-    let prismaService: PrismaService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [BullMQModule],
-            providers: [SuperheroService, PrismaService],
+            providers: [
+                SuperheroService,
+                {
+                    provide: PrismaService,
+                    useValue: prismaMock,
+                },
+            ],
         }).compile();
 
         service = module.get<SuperheroService>(SuperheroService);
-        prismaService = module.get<PrismaService>(PrismaService);
     });
 
-    it('should be defined', () => {
-        expect(service).toBeDefined();
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     it('should get superheroes with pagination', async () => {
+        const currentDate = new Date();
         const mockHeroes = [
             {
                 id: 1,
@@ -29,26 +35,32 @@ describe('SuperheroService', () => {
                 superpower: 'Power1',
                 humilityScore: 8,
                 status: 'Pending',
-                createdAt: new Date(),
-                updatedAt: new Date()
+                createdAt: currentDate,
+                updatedAt: currentDate,
             },
         ];
 
-        jest.spyOn(prismaService.superhero, 'findMany').mockResolvedValue(mockHeroes);
-        jest.spyOn(prismaService.superhero, 'count').mockResolvedValue(1);
+        (prismaMock.superhero.findMany as jest.Mock).mockResolvedValue(mockHeroes);
+        (prismaMock.superhero.count as jest.Mock).mockResolvedValue(1);
 
         const result = await service.getSuperheroes(1, 10);
-        console.log(result);
+
+        expect(result).toBeDefined();
         expect(result.data).toEqual(mockHeroes);
         expect(result.meta.total).toBe(1);
     });
 
     it('should return an empty list when there are no superheroes', async () => {
-        jest.spyOn(prismaService.superhero, 'findMany').mockResolvedValue([]);
-        jest.spyOn(prismaService.superhero, 'count').mockResolvedValue(0);
+        jest.spyOn(prismaMock.superhero, 'findMany').mockResolvedValue([]);
+        jest.spyOn(prismaMock.superhero, 'count').mockResolvedValue(0);
 
         const result = await service.getSuperheroes(1, 10);
         expect(result.data).toEqual([]);
         expect(result.meta.total).toBe(0);
+    });
+
+    afterAll(async () => {
+        await prismaMock.$disconnect();
+        jest.clearAllMocks();
     });
 });
