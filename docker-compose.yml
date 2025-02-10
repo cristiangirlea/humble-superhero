@@ -74,22 +74,27 @@ services:
       postgres:
         condition: service_healthy
 
-#  frontend:
-#    build: ./frontend
-#    container_name: humble_frontend
-#    ports:
-#      - '8080:80'
-#    depends_on:
-#      - backend
-#    networks:
-#      - app_network
-#    restart: unless-stopped
-#    healthcheck:
-#      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/" ]
-#      interval: 30s
-#      timeout: 3s
-#      retries: 3
-#      start_period: 30s
+  frontend:
+    build:
+      context: ./frontend
+      target: ${BUILD_ENV:-dev}  # Use 'dev' for development, 'build' for production
+    container_name: humble_frontend
+    ports:
+      - "5173:5173" # Development port
+      - "8080:80"   # Production port
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules # Prevents overwriting node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://backend:3000
+    command: ["npm", "run", "dev"]
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5173/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
 
   # Test Services
   postgres_test:
