@@ -45,7 +45,7 @@ export const deleteSuperhero = async (heroId) => {
 export const updateSuperhero = async (heroId, heroData) => {
     try {
         const res = await fetch(`${BASE_URL}/superheroes/${heroId}`, {
-            method: "PUT",
+            method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(heroData),
         });

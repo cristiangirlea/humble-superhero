@@ -1,6 +1,6 @@
 import React from "react";
 
-const HeroList = ({ heroes, loading }) => {
+const HeroList = ({ heroes, loading, onUpdateHero, onDeleteHero }) => {
     return (
         <div className="max-w-xl mx-auto mt-8 p-6 bg-white shadow-xl rounded-2xl">
             <h2 className="text-xl font-bold mb-4">Superheroes</h2>
@@ -17,6 +17,18 @@ const HeroList = ({ heroes, loading }) => {
                             <div className="text-sm text-gray-800">
                                 Humility Score: {hero.humilityScore}
                             </div>
+                            <button
+                                className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 mt-2"
+                                onClick={() => onUpdateHero(hero)}
+                            >
+                                Update
+                            </button>
+                            <button
+                                className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 mt-2 ml-2"
+                                onClick={() => onDeleteHero(hero.id)}
+                            >
+                                Delete
+                            </button>
                         </li>
                     ))}
                 </ul>
