@@ -123,3 +123,24 @@ Want to contribute? Feel free to fork the repo and submit a PR!
 ## 📩 Submission Instructions
 This solution is available as a **GitHub repository**. Let me know if you need further improvements!
 
+
+## Screenshots
+
+### Home Page
+![Home Page](./screenshots/home_page.png)
+
+### Adding Hero
+![Adding Hero](./screenshots/adding_hero.png)
+
+### Empty Hero List
+![Empty Hero List](./screenshots/empty_hero_list.png)
+
+### Hero List
+![Hero List](./screenshots/hero_list.png)
+
+### Updating Hero
+![Updating Hero](./screenshots/updating_hero.png)
+
+### Hero in List
+![Hero in List](./screenshots/2_hero_in_list.png)
+
