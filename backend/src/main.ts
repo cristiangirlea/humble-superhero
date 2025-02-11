@@ -2,12 +2,43 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    // Add validation pipe globally
     app.useGlobalPipes(new ValidationPipe());
+
+    const allowedOrigins = [
+        'http://localhost:5173',
+        'http://frontend:5173',
+        'http://localhost:8080',
+        'http://frontend:80',
+    ];
+
+    const corsOptions: CorsOptions = {
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        credentials: true,
+        allowedHeaders: [
+            'Content-Type',
+            'Authorization',
+            'X-Requested-With',
+            'Accept',
+            'Origin'
+        ],
+        preflightContinue: false,
+        optionsSuccessStatus: 204,
+    };
+
+    app.enableCors(corsOptions);
+
 
     // Swagger setup
     const config = new DocumentBuilder()

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SuperheroService } from '../superhero.service';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { prismaMock } from '../../../prisma/prisma.mock'; // ✅ Import the mock
+import { prismaMock } from '../../../prisma/prisma.mock';
 import { BullMQModule } from '../../bullmq/bullmq.module';
 
 describe('SuperheroService', () => {

@@ -98,4 +98,30 @@ export class SuperheroService {
             throw error;
         }
     }
+
+    async deleteSuperhero(id: number) {
+        try {
+            const existingHero = await this.prisma.superhero.findUnique({
+                where: { id }
+            });
+
+            if (!existingHero) {
+                throw new NotFoundException(`Superhero with ID ${id} not found`);
+            }
+
+            await this.prisma.superhero.delete({
+                where: { id }
+            });
+
+            // Optionally, you can add a job to the queue for deletion-related tasks
+            await this.bullMQService.addJob({ heroId: id, action: 'delete' });
+
+            return { message: `Superhero with ID ${id} has been deleted` };
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                throw error;
+            }
+            throw error;
+        }
+    }
 }

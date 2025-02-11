@@ -1,9 +1,9 @@
-// superhero.controller.ts
 import {
     Controller,
     Get,
     Post,
     Patch,
+    Delete,
     Body,
     Param,
     ParseIntPipe,
@@ -80,6 +80,25 @@ export class SuperheroController {
         return {
             message: 'Superhero updated successfully!',
             superhero: updatedHero
+        };
+    }
+
+    @Delete(':id')
+    @ApiOperation({ summary: 'Delete a superhero' })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: 'The superhero has been successfully deleted.'
+    })
+    @ApiResponse({
+        status: HttpStatus.NOT_FOUND,
+        description: 'Superhero not found.'
+    })
+    async deleteSuperhero(
+        @Param('id', ParseIntPipe) id: number,
+    ) {
+        await this.superheroService.deleteSuperhero(id);
+        return {
+            message: 'Superhero deleted successfully!'
         };
     }
 }
