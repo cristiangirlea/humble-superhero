@@ -99,7 +99,10 @@ As a team player, I would:
 ## 🚀 Eagerness to Learn
 ### **If I had more time**
 - I would implement **superhero teams or missions** to expand functionality.
-- I would explore **a frontend using React** to visualize superheroes in real-time.
+- Implement user authentication and authorization to secure the API.
+- Add more comprehensive tests, including integration tests.
+- Enhance the frontend with more features, such as search and filter options.
+- Deploy the application to a cloud provider for real-world usage.
 - I would **add authentication** to restrict access to certain API features.
 
 ---
